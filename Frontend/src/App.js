@@ -1,7 +1,7 @@
 import './App.css';
-import { Image, Alert, Button, Container, Row, Col, Table } from 'react-bootstrap';
+import { Image, Alert, Container, Row, Col } from 'react-bootstrap';
 import React, { useState, useEffect, useRef } from 'react';
-import { AddToDoItem } from './components/AddToDoItem/AddToDoItem';
+import { AddToDoItem, ToDoList } from './components';
 import axios from 'axios';
 import { TO_DO_URL } from './constants';
 
@@ -13,42 +13,6 @@ const App = () => {
   useEffect(() => {
     getItems();
   }, []);
-
-  const renderTodoItemsContent = () => {
-    return (
-      <>
-        <h1>
-          Showing {items.length} Item(s){' '}
-          <Button variant="primary" className="pull-right" onClick={() => getItems()}>
-            Refresh
-          </Button>
-        </h1>
-
-        <Table striped bordered hover>
-          <thead>
-            <tr>
-              <th>Id</th>
-              <th>Description</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {items.map((item) => (
-              <tr key={item.id}>
-                <td>{item.id}</td>
-                <td>{item.description}</td>
-                <td>
-                  <Button variant="warning" size="sm" onClick={() => handleMarkAsComplete(item)}>
-                    Mark as completed
-                  </Button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
-      </>
-    );
-  };
 
   async function getItems() {
     setError(null);
@@ -139,7 +103,9 @@ const App = () => {
         </Row>
         <br />
         <Row>
-          <Col>{renderTodoItemsContent()}</Col>
+          <Col>
+            <ToDoList items={items} getItems={getItems} markAsComplete={handleMarkAsComplete} />
+          </Col>
         </Row>
       </Container>
       <footer className="page-footer font-small teal pt-4">
