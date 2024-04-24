@@ -1,6 +1,17 @@
 import React, { useState } from 'react';
 import { Button, Col, Container, Form, Row, Stack } from 'react-bootstrap';
 
+/**
+ * A simple input field with an action button to add todo item and a clear button.
+ *
+ * @component
+ * @param {Object} props - The component accepts onAddItem as props
+ * @param {function} props.onAddItem - The add item handler.
+ * @returns {JSX.Element} The rendered input component.
+ *
+ * @usage
+ * <AddToDoItem onAddItem={() => console.log('Add button clicked!')} />
+ */
 export const AddToDoItem = ({ onAddItem }) => {
   const [description, setDescription] = useState('');
 
