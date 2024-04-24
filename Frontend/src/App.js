@@ -1,15 +1,17 @@
 import './App.css';
 import { Image, Alert, Button, Container, Row, Col, Table } from 'react-bootstrap';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { AddToDoItem } from './components/AddToDoItem/AddToDoItem';
-
-const axios = require('axios');
+import axios from 'axios';
+import { TO_DO_URL } from './constants';
 
 const App = () => {
+  const ref = useRef(null);
   const [items, setItems] = useState([]);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    // todo
+    getItems();
   }, []);
 
   const renderTodoItemsContent = () => {
@@ -49,22 +51,44 @@ const App = () => {
   };
 
   async function getItems() {
+    setError(null);
     try {
-      alert('todo');
+      const { data } = await axios.get(TO_DO_URL);
+      setItems(data);
     } catch (error) {
+      setError('Server Error. Please try again later.');
       console.error(error);
     }
   }
 
-  async function handleAdd() {
+  async function handleAdd(description) {
+    setError(null);
     try {
-      alert('todo');
-    } catch (error) {
-      console.error(error);
+      const { status } = await axios.post(
+        TO_DO_URL,
+        {
+          description,
+          isCompleted: false,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      if (status === 201) {
+        getItems();
+        ref.current.clear();
+      }
+    } catch ({ message, response }) {
+      setError(response?.data ?? message ?? 'Please enter a non existing description and try again');
+    } finally {
+      ref.current.focus();
     }
   }
 
   async function handleMarkAsComplete(item) {
+    setError(null);
     try {
       alert('todo');
     } catch (error) {
@@ -105,7 +129,12 @@ const App = () => {
         </Row>
         <Row>
           <Col>
-            <AddToDoItem onAddItem={handleAdd} />
+            <AddToDoItem onAddItem={handleAdd} ref={ref} />
+            {error && (
+              <Alert variant="danger" dismissible transition>
+                {error}
+              </Alert>
+            )}
           </Col>
         </Row>
         <br />
