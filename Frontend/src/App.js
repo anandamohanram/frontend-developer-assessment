@@ -15,10 +15,10 @@ const App = () => {
   }, []);
 
   async function getItems() {
-    setError(null);
     try {
       const { data } = await axios.get(TO_DO_URL);
       setItems(data);
+      setError(null);
     } catch (error) {
       setError('Server Error. Please try again later.');
       console.error(error);
@@ -26,7 +26,6 @@ const App = () => {
   }
 
   async function handleAdd(description) {
-    setError(null);
     try {
       const { status } = await axios.post(
         TO_DO_URL,
@@ -42,21 +41,43 @@ const App = () => {
       );
       if (status === 201) {
         getItems();
+        setError(null);
         ref.current.clear();
       }
-    } catch ({ message, response }) {
-      setError(response?.data ?? message ?? 'Please enter a non existing description and try again');
+    } catch (error) {
+      const { message, response } = error;
+      setError(response?.data ?? message ?? 'Some internal error. Please try again');
+      console.error(error);
     } finally {
       ref.current.focus();
     }
   }
 
   async function handleMarkAsComplete(item) {
-    setError(null);
+    if (item.isCompleted) return;
     try {
-      alert('todo');
+      const { status } = await axios.put(
+        `${TO_DO_URL}${item.id}`,
+        {
+          description: item?.description,
+          isCompleted: true,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      if (status === 200) {
+        getItems();
+        setError(null);
+      }
     } catch (error) {
+      const { message, response } = error;
+      setError(response?.data ?? message ?? 'Some internal error. Please try again');
       console.error(error);
+    } finally {
+      ref.current.focus();
     }
   }
 

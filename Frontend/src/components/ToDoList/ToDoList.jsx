@@ -35,12 +35,12 @@ export const ToDoList = ({ items, getItems, markAsComplete }) => {
     <>
       <h1>
         Showing {items.length} Item(s){' '}
-        <Button variant="primary" className="pull-right" onClick={() => getItems()}>
+        <Button data-testid="button-refresh" variant="primary" className="pull-right" onClick={() => getItems()}>
           Refresh
         </Button>
       </h1>
 
-      <Table striped bordered hover>
+      <Table data-testid="table-todo-list" striped bordered hover>
         <thead>
           <tr>
             <th>Id</th>
@@ -50,12 +50,19 @@ export const ToDoList = ({ items, getItems, markAsComplete }) => {
         </thead>
         <tbody>
           {items.map((item) => (
-            <tr key={item.id}>
+            <tr data-testid="row-todo-list" key={item.id}>
               <td>{item.id}</td>
               <td>{item.description}</td>
               <td>
-                <Button variant="warning" size="sm" onClick={() => markAsComplete(item)}>
-                  Mark as completed
+                <Button
+                  data-testid="button-mark-as-completed"
+                  variant={item.isCompleted ? 'success' : 'warning'}
+                  disabled={item.isCompleted}
+                  size="sm"
+                  className="action-button"
+                  onClick={() => markAsComplete(item)}
+                >
+                  {item.isCompleted ? 'Completed' : 'Mark as completed'}
                 </Button>
               </td>
             </tr>

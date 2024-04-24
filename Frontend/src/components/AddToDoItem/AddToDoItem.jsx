@@ -6,8 +6,8 @@ import { Button, Col, Container, Form, Row, Stack } from 'react-bootstrap';
  *
  * @component
  * @param {Object} props - The component accepts onAddItem as props
- * @param {function} props.onAddItem - The add item handler.
- * @returns {JSX.Element} The rendered input component.
+ * @param {function} props.onAddItem - The add item handler
+ * @returns {JSX.Element} The rendered input component
  *
  * @usage
  * <AddToDoItem onAddItem={() => console.log('Add button clicked!')} />
@@ -49,6 +49,7 @@ export const AddToDoItem = forwardRef(({ onAddItem }, ref) => {
         <Col md="6">
           <Form.Control
             type="text"
+            data-testid="input-todo-description"
             placeholder="Enter description..."
             value={description}
             ref={inputRef}
@@ -58,10 +59,10 @@ export const AddToDoItem = forwardRef(({ onAddItem }, ref) => {
       </Form.Group>
       <Form.Group as={Row} className="mb-3 offset-md-2" controlId="formAddTodoItem">
         <Stack direction="horizontal" gap={2}>
-          <Button variant="primary" onClick={() => onAddItem(description)}>
+          <Button data-testid="button-add-item" variant="primary" onClick={() => onAddItem(description)}>
             Add Item
           </Button>
-          <Button variant="secondary" onClick={() => handleClear()}>
+          <Button data-testid="button-clear-input" variant="secondary" onClick={() => handleClear()}>
             Clear
           </Button>
         </Stack>
