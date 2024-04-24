@@ -16,7 +16,7 @@ const App = () => {
 
   async function getItems() {
     try {
-      const { data } = await axios.get(TO_DO_URL);
+      const { data = [] } = await axios.get(TO_DO_URL);
       setItems(data);
       setError(null);
     } catch (error) {
@@ -27,7 +27,7 @@ const App = () => {
 
   async function handleAdd(description) {
     try {
-      const { status } = await axios.post(
+      const { status, data } = await axios.post(
         TO_DO_URL,
         {
           description,
@@ -39,8 +39,9 @@ const App = () => {
           },
         }
       );
+
       if (status === 201) {
-        getItems();
+        setItems([...items, data]);
         setError(null);
         ref.current.clear();
       }
@@ -56,7 +57,7 @@ const App = () => {
   async function handleMarkAsComplete(item) {
     if (item.isCompleted) return;
     try {
-      const { status } = await axios.put(
+      const res = await axios.put(
         `${TO_DO_URL}${item.id}`,
         {
           description: item?.description,
@@ -68,11 +69,12 @@ const App = () => {
           },
         }
       );
-      if (status === 200) {
+      if (res?.status === 200) {
         getItems();
         setError(null);
       }
     } catch (error) {
+      console.log('🚀 ~ handleMarkAsComplete ~ error:', error);
       const { message, response } = error;
       setError(response?.data ?? message ?? 'Some internal error. Please try again');
       console.error(error);
@@ -114,12 +116,13 @@ const App = () => {
         </Row>
         <Row>
           <Col>
+            <span data-testid="error-message">{error}</span>
             <AddToDoItem onAddItem={handleAdd} ref={ref} />
-            {error && (
-              <Alert variant="danger" dismissible transition>
+            {/* {error && (
+              <Alert variant="danger" transition>
                 {error}
               </Alert>
-            )}
+            )} */}
           </Col>
         </Row>
         <br />
