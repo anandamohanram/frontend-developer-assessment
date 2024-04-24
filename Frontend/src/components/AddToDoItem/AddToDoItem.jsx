@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { forwardRef, useImperativeHandle, useRef, useState } from 'react';
 import { Button, Col, Container, Form, Row, Stack } from 'react-bootstrap';
 
 /**
@@ -12,7 +12,8 @@ import { Button, Col, Container, Form, Row, Stack } from 'react-bootstrap';
  * @usage
  * <AddToDoItem onAddItem={() => console.log('Add button clicked!')} />
  */
-export const AddToDoItem = ({ onAddItem }) => {
+export const AddToDoItem = forwardRef(({ onAddItem }, ref) => {
+  const inputRef = useRef(null);
   const [description, setDescription] = useState('');
 
   const handleDescriptionChange = (event) => {
@@ -22,6 +23,21 @@ export const AddToDoItem = ({ onAddItem }) => {
   const handleClear = () => {
     setDescription('');
   };
+
+  useImperativeHandle(
+    ref,
+    () => {
+      return {
+        focus() {
+          inputRef.current.focus();
+        },
+        clear() {
+          handleClear();
+        },
+      };
+    },
+    []
+  );
 
   return (
     <Container>
@@ -35,6 +51,7 @@ export const AddToDoItem = ({ onAddItem }) => {
             type="text"
             placeholder="Enter description..."
             value={description}
+            ref={inputRef}
             onChange={handleDescriptionChange}
           />
         </Col>
@@ -51,4 +68,4 @@ export const AddToDoItem = ({ onAddItem }) => {
       </Form.Group>
     </Container>
   );
-};
+});
