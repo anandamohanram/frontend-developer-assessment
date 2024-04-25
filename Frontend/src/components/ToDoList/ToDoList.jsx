@@ -1,4 +1,8 @@
-import { Button, Table } from 'react-bootstrap';
+import { Button, Container, Table } from 'react-bootstrap';
+import { MdCheckCircle, MdUndo } from 'react-icons/md';
+import { TbProgress } from 'react-icons/tb';
+import { FaUndoAlt, FaCheckCircle } from 'react-icons/fa';
+import './ToDoList.css';
 
 /**
  * A ToDo Item
@@ -33,12 +37,12 @@ import { Button, Table } from 'react-bootstrap';
 export const ToDoList = ({ items, getItems, markAsComplete }) => {
   return (
     <>
-      <h1>
+      <h6>
         Showing {items.length} Item(s){' '}
         <Button data-testid="button-refresh" variant="primary" className="pull-right" onClick={() => getItems()}>
           Refresh
         </Button>
-      </h1>
+      </h6>
 
       <Table data-testid="table-todo-list" striped bordered hover>
         <thead>
@@ -50,20 +54,35 @@ export const ToDoList = ({ items, getItems, markAsComplete }) => {
         </thead>
         <tbody>
           {items.map((item) => (
-            <tr data-testid="row-todo-list" key={item.id}>
+            <tr data-testid="row-todo-list" key={item.id} className="align-middle">
               <td>{item.id}</td>
-              <td>{item.description}</td>
               <td>
-                <Button
+                <Container className={`description-container ${item.isCompleted ? 'description-completed' : ''}`}>
+                  {item.isCompleted ? <MdCheckCircle className="green icon" /> : <TbProgress className="yellow icon" />}
+                  {item.description}
+                </Container>
+              </td>
+              <td className="action-buttons-wrapper">
+                <button
+                  title="Mark as complete"
                   data-testid="button-mark-as-completed"
                   variant={item.isCompleted ? 'success' : 'warning'}
                   disabled={item.isCompleted}
                   size="sm"
-                  className="action-button"
+                  className="green icon-button"
                   onClick={() => markAsComplete(item)}
                 >
-                  {item.isCompleted ? 'Completed' : 'Mark as completed'}
-                </Button>
+                  <FaCheckCircle />
+                </button>
+                <button
+                  className="yellow icon-button"
+                  title="Redo"
+                  data-testid="button-redo"
+                  disabled={!item?.isCompleted}
+                  onClick={() => markAsComplete(item, true)}
+                >
+                  <FaUndoAlt />
+                </button>
               </td>
             </tr>
           ))}

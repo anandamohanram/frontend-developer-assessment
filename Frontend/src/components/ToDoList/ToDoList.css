@@ -1,0 +1,49 @@
+.description-container {
+  display: grid;
+  grid-template-columns: 2rem 1fr;
+  justify-items: start;
+  align-items: center;
+  text-align: left;
+}
+
+.description-completed {
+  text-decoration: line-through;
+}
+
+.icon {
+  font-size: 1.5rem;
+}
+
+.icon-button {
+  all: unset;
+  cursor: pointer;
+  font-size: 40px;
+  transition: transform 0.1s ease-in-out;
+}
+.icon-button:hover:not(:disabled) {
+  transform: scale(1.2); /* Scale the icon on hover */
+}
+
+.icon-button:active:not(:disabled) {
+  transform: translateY(2px); /* Shift the icon down by 2px when pressed */
+}
+
+.icon-button:disabled {
+  display: none;
+}
+
+.action-buttons-wrapper {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.green {
+  color: #14a44d;
+}
+
+.yellow {
+  color: #e4a11b;
+}

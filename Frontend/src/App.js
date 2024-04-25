@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { AddToDoItem, ToDoList } from './components';
 import axios from 'axios';
 import { TO_DO_URL } from './constants';
+import { FaInfoCircle } from 'react-icons/fa';
 
 const App = () => {
   const ref = useRef(null);
@@ -54,14 +55,14 @@ const App = () => {
     }
   }
 
-  async function handleMarkAsComplete(item) {
-    if (item.isCompleted) return;
+  async function handleMarkAsComplete(item, undo = false) {
+    if (item.isCompleted & !undo) return;
     try {
       const res = await axios.put(
         `${TO_DO_URL}${item.id}`,
         {
           description: item?.description,
-          isCompleted: true,
+          isCompleted: undo ? false : true,
         },
         {
           headers: {
@@ -74,7 +75,6 @@ const App = () => {
         setError(null);
       }
     } catch (error) {
-      console.log('🚀 ~ handleMarkAsComplete ~ error:', error);
       const { message, response } = error;
       setError(response?.data ?? message ?? 'Some internal error. Please try again');
       console.error(error);
@@ -116,13 +116,11 @@ const App = () => {
         </Row>
         <Row>
           <Col>
-            <span data-testid="error-message">{error}</span>
             <AddToDoItem onAddItem={handleAdd} ref={ref} />
-            {/* {error && (
-              <Alert variant="danger" transition>
-                {error}
-              </Alert>
-            )} */}
+            <Col sm={{ span: 8, offset: 2 }} className="d-flex justify-content-center align-items-center text-danger">
+              {error && <FaInfoCircle className="me-4" />}
+              <span data-testid="error-message">{error}</span>
+            </Col>
           </Col>
         </Row>
         <br />

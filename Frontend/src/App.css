@@ -1,9 +1,6 @@
 .App {
   text-align: center;
-}
-
-.action-button {
-  width: 150px;
+  min-width: 375px;
 }
 
 .list-left {

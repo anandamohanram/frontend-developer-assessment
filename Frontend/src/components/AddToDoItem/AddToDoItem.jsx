@@ -1,5 +1,5 @@
 import React, { forwardRef, useImperativeHandle, useRef, useState } from 'react';
-import { Button, Col, Container, Form, Row, Stack } from 'react-bootstrap';
+import { Button, Card, Col, Container, Form, Row, Stack } from 'react-bootstrap';
 
 /**
  * A simple input field with an action button to add todo item and a clear button.
@@ -24,6 +24,7 @@ export const AddToDoItem = forwardRef(({ onAddItem }, ref) => {
     setDescription('');
   };
 
+  // to expose inner ref and methods to parent
   useImperativeHandle(
     ref,
     () => {
@@ -40,33 +41,43 @@ export const AddToDoItem = forwardRef(({ onAddItem }, ref) => {
   );
 
   return (
-    <Container>
-      <h1>Add Item</h1>
+    <Card className="p-3">
+      <h6 className="mb-4">Add Item</h6>
+      <Form.Group className="mb-3" controlId="formAddTodoItem">
+        <Row>
+          <Col sm={{ span: 8, offset: 2 }}>
+            <Form.Label className="text-sm-left">Description</Form.Label>
+          </Col>
+          <Col sm={{ span: 8, offset: 2 }}>
+            <Form.Control
+              type="text"
+              data-testid="input-todo-description"
+              placeholder="Enter description..."
+              value={description}
+              ref={inputRef}
+              onChange={handleDescriptionChange}
+            />
+          </Col>
+        </Row>
+      </Form.Group>
+
       <Form.Group as={Row} className="mb-3" controlId="formAddTodoItem">
-        <Form.Label column sm="2">
-          Description
-        </Form.Label>
-        <Col md="6">
-          <Form.Control
-            type="text"
-            data-testid="input-todo-description"
-            placeholder="Enter description..."
-            value={description}
-            ref={inputRef}
-            onChange={handleDescriptionChange}
-          />
+        <Col sm={{ span: 8, offset: 2 }}>
+          <Stack direction="horizontal" gap={2}>
+            <Button
+              data-testid="button-add-item"
+              variant="primary"
+              onClick={() => onAddItem(description)}
+              className="w-50"
+            >
+              Add Item
+            </Button>
+            <Button data-testid="button-clear-input" variant="secondary" onClick={() => handleClear()} className="w-50">
+              Clear
+            </Button>
+          </Stack>
         </Col>
       </Form.Group>
-      <Form.Group as={Row} className="mb-3 offset-md-2" controlId="formAddTodoItem">
-        <Stack direction="horizontal" gap={2}>
-          <Button data-testid="button-add-item" variant="primary" onClick={() => onAddItem(description)}>
-            Add Item
-          </Button>
-          <Button data-testid="button-clear-input" variant="secondary" onClick={() => handleClear()}>
-            Clear
-          </Button>
-        </Stack>
-      </Form.Group>
-    </Container>
+    </Card>
   );
 });
