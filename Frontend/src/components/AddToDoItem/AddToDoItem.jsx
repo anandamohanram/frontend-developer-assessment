@@ -1,5 +1,5 @@
 import React, { forwardRef, useImperativeHandle, useRef, useState } from 'react';
-import { Button, Card, Col, Container, Form, Row, Stack } from 'react-bootstrap';
+import { Button, Card, Col, Form, Row, Stack } from 'react-bootstrap';
 
 /**
  * A simple input field with an action button to add todo item and a clear button.
@@ -42,11 +42,11 @@ export const AddToDoItem = forwardRef(({ onAddItem }, ref) => {
 
   return (
     <Card className="p-3">
-      <h6 className="mb-4">Add Item</h6>
+      <h5 className="mb-4">Add Item</h5>
       <Form.Group className="mb-3" controlId="formAddTodoItem">
         <Row>
           <Col sm={{ span: 8, offset: 2 }}>
-            <Form.Label className="text-sm-left">Description</Form.Label>
+            <Form.Label>Description</Form.Label>
           </Col>
           <Col sm={{ span: 8, offset: 2 }}>
             <Form.Control

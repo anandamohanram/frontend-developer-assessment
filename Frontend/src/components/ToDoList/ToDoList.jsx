@@ -1,5 +1,5 @@
-import { Button, Container, Table } from 'react-bootstrap';
-import { MdCheckCircle, MdUndo } from 'react-icons/md';
+import { Button, Col, Container, Row, Table } from 'react-bootstrap';
+import { MdCheckCircle } from 'react-icons/md';
 import { TbProgress } from 'react-icons/tb';
 import { FaUndoAlt, FaCheckCircle } from 'react-icons/fa';
 import './ToDoList.css';
@@ -37,13 +37,14 @@ import './ToDoList.css';
 export const ToDoList = ({ items, getItems, markAsComplete }) => {
   return (
     <>
-      <h6>
-        Showing {items.length} Item(s){' '}
-        <Button data-testid="button-refresh" variant="primary" className="pull-right" onClick={() => getItems()}>
-          Refresh
-        </Button>
-      </h6>
-
+      <Row className="mb-3">
+        <Col sm={{ span: 12 }} className="d-flex gap-2 justify-content-end ">
+          <h5 className="mt-1">Showing {items.length} Item(s) </h5>
+          <Button data-testid="button-refresh" variant="primary" size="sm" className="ml-4" onClick={() => getItems()}>
+            Refresh
+          </Button>
+        </Col>
+      </Row>
       <Table data-testid="table-todo-list" striped bordered hover>
         <thead>
           <tr>

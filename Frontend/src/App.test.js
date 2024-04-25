@@ -1,8 +1,8 @@
-import React from 'react';
-import { render, waitFor, fireEvent, screen, act } from '@testing-library/react';
-import axios from 'axios';
 import App from './App';
+import React from 'react';
+import axios from 'axios';
 import { TO_DO_URL } from './constants';
+import { render, waitFor, fireEvent, screen, act } from '@testing-library/react';
 
 jest.mock('axios');
 
